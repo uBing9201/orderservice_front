@@ -5,6 +5,8 @@ import Footer from './components/Footer';
 import { Route, Routes } from 'react-router-dom';
 import MemberCreate from './components/MemberCreate';
 import { AuthContextProvider } from './context/UserContext';
+import LoginPage from './components/LoginPage';
+import './App.css';
 
 const App = () => {
   return (
@@ -15,6 +17,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/member/create' element={<MemberCreate />} />
+            <Route path='/login' element={<LoginPage />} />
           </Routes>
         </div>
         <Footer />
