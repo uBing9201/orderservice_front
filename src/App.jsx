@@ -7,6 +7,7 @@ import MemberCreate from './components/MemberCreate';
 import { AuthContextProvider } from './context/UserContext';
 import LoginPage from './components/LoginPage';
 import './App.css';
+import ProductList from './components/ProductList';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
             <Route path='/' element={<Home />} />
             <Route path='/member/create' element={<MemberCreate />} />
             <Route path='/login' element={<LoginPage />} />
+            <Route path='/product/list' element={<ProductList />} />
           </Routes>
         </div>
         <Footer />
