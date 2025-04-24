@@ -17,6 +17,8 @@ import {
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../context/UserContext';
+import CartContext from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProductList = ({ pageTitle }) => {
   const [searchType, setSearchType] = useState('optional');
@@ -26,6 +28,10 @@ const ProductList = ({ pageTitle }) => {
 
   const { userRole } = useContext(AuthContext);
   const isAdmin = userRole === 'ADMIN';
+
+  const { addCart } = useContext(CartContext);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadProduct(1, 10);
@@ -79,7 +85,13 @@ const ProductList = ({ pageTitle }) => {
 
     if (confirm('상품을 장바구니에 추가하시겠습니까?')) {
       // 카트로 상품을 보내주기
+      // addCart(finalSelected);
+      finalSelected.forEach((product) => addCart(product));
       alert('선택한 상품이 장바구니에 추가되었습니다.');
+    }
+
+    if (confirm('장바구니로 이동하시겠습니까?')) {
+      navigate('/order/cart');
     }
   };
 
@@ -138,7 +150,7 @@ const ProductList = ({ pageTitle }) => {
         {!isAdmin && (
           <Grid item>
             <Button onClick={handleAddToCart} color='secondary'>
-              장바구니
+              장바구니에 담기
             </Button>
           </Grid>
         )}
@@ -173,7 +185,7 @@ const ProductList = ({ pageTitle }) => {
                 <TableRow key={product.id}>
                   <TableCell>
                     <img
-                      src={product.imagePath}
+                      src={`http://localhost:8181/image/${product.imagePath}`}
                       alt={product.name}
                       style={{ height: '100px', width: 'auto' }}
                     />
