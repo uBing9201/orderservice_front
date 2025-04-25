@@ -185,7 +185,7 @@ const ProductList = ({ pageTitle }) => {
                 <TableRow key={product.id}>
                   <TableCell>
                     <img
-                      src={`http://localhost:8181/image/${product.imagePath}`}
+                      src={product.imagePath}
                       alt={product.name}
                       style={{ height: '100px', width: 'auto' }}
                     />
