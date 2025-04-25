@@ -56,7 +56,7 @@ const MyPage = () => {
     };
 
     fetchMemberInfo();
-  }, []);
+  }, [userRole]);
 
   return (
     <Container>

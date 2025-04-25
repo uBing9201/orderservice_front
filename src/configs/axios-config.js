@@ -14,9 +14,9 @@ const axiosInstance = axios.create({
 });
 
 /*
-  Axios Interceptor는 요청 또는 응답이 처리되기 전에 실행되는 코드입니다.
-  요청을 수정하거나, 응답에 대한 결과 처리를 수행할 수 있습니다.
- */
+Axios Interceptor는 요청 또는 응답이 처리되기 전에 실행되는 코드입니다.
+요청을 수정하거나, 응답에 대한 결과 처리를 수행할 수 있습니다.
+*/
 
 // 요청용 인터셉터
 // 인터셉터의 use함수는 매개값 두 개 받습니다. 둘 다 콜백 함수 형식입니다.
@@ -44,40 +44,41 @@ axiosInstance.interceptors.response.use(
     console.log(error);
 
     if (error.response.data.message === 'NO_LOGIN') {
-      console.log('로그인을 하지 않아 재발급 요청을 할 수가 없다.');
+      console.log('아예 로그인을 하지 않아서 재발급 요청 들어갈 수 없음!');
       return Promise.reject(error);
     }
 
-    // 원래의 요청 정보를 기억해 놓자 -> 새 토큰 발급 받아서 다시 시도
+    // 원래의 요청 정보를 기억해 놓자 -> 새 토큰 발급 받아서 다시 시도할 거니깐.
     const originalRequest = error.config;
 
     // 토큰 재발급 로직 작성
     if (error.response.status === 401) {
       console.log('응답상태 401 발생! 토큰 재발급 필요!');
+
       try {
         const id = localStorage.getItem('USER_ID');
+
         const res = await axios.post('http://localhost:8181/user/refresh', {
           id,
         });
-
-        const newToken = res.data.result.token; // axios는 json() 안쓴다
-        localStorage.setItem('ACCESS_TOKEN', newToken); // 동일한 이름ㄷ으로 토큰 담기 (덮어씀)
+        const newToken = res.data.result.token; // axios는 json() 안씁니다.
+        localStorage.setItem('ACCESS_TOKEN', newToken); // 동일한 이름으로 토큰 담기 (덮어씀)
 
         // 실패한 원본 요청 정보에서 Authorization의 값을 새 토큰으로 갈아 끼우자
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-        // axios 인스턴스의 header Authorizationeh도 새 토큰으로 변경
+        // axios 인스턴스의 header Authorization도 새 토큰으로 갈아 끼우자.
         axiosInstance.defaults.headers.Authorization = `Bearer ${newToken}`;
 
         // axiosInstance를 사용하여 다시한번 원본 요청을 보내고, 응답은 원래 호출한 곳으로 리턴
         return axiosInstance(originalRequest);
-      } catch (e) {
-        console.log(e);
-        // 백엔드에서 401을 보낸거 -> Refresh도 만려된 상황 (로그아웃처럼 처리해줘야 함)
+      } catch (error) {
+        console.log(error);
+        // 백엔드에서 401을 보낸거 -> Refresh도 만료된 상황 (로그아웃처럼 처리해줘야 함.)
         localStorage.clear();
       }
     }
-    // 재발급 요청도 거절당하면 인스턴스를 호출한 곳으로 에러 정보 리턴
+    // 재발급 요청도 거절당하면 인스턴스를 호출한 곳으로 에러 정보 리턴.
     return Promise.reject(error);
   },
 );
