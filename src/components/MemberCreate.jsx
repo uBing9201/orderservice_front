@@ -9,6 +9,7 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL, USER } from '../configs/host-config';
 
 const MemberCreate = () => {
   const [name, setName] = useState('');
@@ -18,9 +19,9 @@ const MemberCreate = () => {
   const [street, setStreet] = useState('');
   const [zipcode, setZipcode] = useState('');
 
-  // react router dom 에서 제공하는 훅 useNavigate
-  // 사용자가 특정 요소를 누르지 않아도 이벤트 등에서 페이지를 이동시킬 때 사용허는 훅
-  // 리턴받은 함수를 통해 원ㅇ하는 url을 문자열로 전달한다.
+  // react router dom에서 제공하는 훅 useNavigate
+  // 사용자가 특정 요소를 누르지 않아도 이벤트 등에서 페이지를 이동시킬 때 사용하는 훅
+  // 리턴받은 함수를 통해 원하는 url을 문자열로 전달합니다.
   const navigate = useNavigate();
 
   const memberCreate = async (e) => {
@@ -38,7 +39,7 @@ const MemberCreate = () => {
       },
     };
 
-    const res = await fetch(`http://localhost:8181/user/create`, {
+    const res = await fetch(`${API_BASE_URL}${USER}/create`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -52,7 +53,6 @@ const MemberCreate = () => {
       navigate('/');
     } else {
       alert(data.statusMessage);
-      console.log(data);
     }
 
     /*
@@ -66,16 +66,17 @@ const MemberCreate = () => {
       .then((res) => {
         if (res.status === 201) return res.json();
         else {
-          alert('이메일이 중복되어있습니다. 다른 이메일로 다시 시도해 보세요!');
+          alert('이메일이 중복되었습니다. 다른 이메일로 다시 시도해 보세요!');
           return;
         }
       })
       .then((data) => {
         if (data) {
-          console.log('백엔드로부터 전달된 데이터 :', data);
+          console.log('백엔드로부터 전달된 데이터: ', data);
           alert(`${data.result}님 환영합니다!`);
         }
-      });*/
+      });
+    */
   };
 
   return (

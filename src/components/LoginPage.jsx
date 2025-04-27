@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/UserContext';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { API_BASE_URL, USER } from '../configs/host-config';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -27,11 +28,7 @@ const LoginPage = () => {
     };
 
     try {
-      const res = await axios.post(
-        'http://localhost:8181/user/doLogin',
-        loginData,
-      );
-
+      const res = await axios.post(`${API_BASE_URL}${USER}/doLogin`, loginData);
       alert('로그인 성공!');
       onLogin(res.data.result);
       navigate('/');
@@ -39,6 +36,7 @@ const LoginPage = () => {
       console.log(e); // 백엔드 데이터: e.response.data
       alert('로그인 실패입니다. 아이디 또는 비밀번호를 확인하세요!');
     }
+
     /*
     const res = await fetch('http://localhost:8181/user/doLogin', {
       method: 'POST',
