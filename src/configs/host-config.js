@@ -23,4 +23,3 @@ export const API_BASE_URL = backendHostName;
 export const USER = '/user';
 export const PROD = '/product';
 export const ORDER = '/order';
-s;
